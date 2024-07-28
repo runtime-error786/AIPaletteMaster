@@ -32,3 +32,15 @@ def draw_color_palette(image):
     cv2.rectangle(image, (500, 50), (600, 150), (0, 0, 0), 2)
     cv2.putText(image, 'Eraser', (520, 110), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 0), 2, cv2.LINE_AA)
 
+def select_color(index_x, index_y):
+    """Select color based on index finger position."""
+    global selected_color
+    if 50 < index_x < 150 and 50 < index_y < 150:
+        selected_color = colors['Yellow']
+    elif 200 < index_x < 300 and 50 < index_y < 150:
+        selected_color = colors['Red']
+    elif 350 < index_x < 450 and 50 < index_y < 150:
+        selected_color = colors['Green']
+    elif 500 < index_x < 600 and 50 < index_y < 150:
+        selected_color = eraser
+
