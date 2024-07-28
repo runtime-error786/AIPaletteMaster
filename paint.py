@@ -20,3 +20,7 @@ colors = {
 eraser = 'Eraser'
 selected_color = (255, 255, 255)  
 
+def is_close(x1, y1, x2, y2, threshold=40):
+    """Check if two points are close to each other."""
+    return np.sqrt((x2 - x1)**2 + (y2 - y1)**2) < threshold
+
