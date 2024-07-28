@@ -72,3 +72,39 @@ def process_frame(image, hand_landmarks, canvas):
         else:
             draw_on_canvas(canvas, index_x, index_y)
 
+def main():
+    """Main function to run the virtual painter."""
+    with mp_hands.Hands(static_image_mode=False, max_num_hands=1, min_detection_confidence=0.5) as hands:
+        canvas = np.ones((desired_height, desired_width, 3), dtype=np.uint8) * 255
+
+        while cap.isOpened():
+            ret, frame = cap.read()
+            if not ret:
+                break
+
+            frame = cv2.flip(frame, 1)
+            image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            image.flags.writeable = False
+
+            results = hands.process(image)
+
+            image.flags.writeable = True
+            image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+
+            draw_color_palette(image)
+
+            if results.multi_hand_landmarks:
+                process_frame(image, results.multi_hand_landmarks, canvas)
+
+            image = cv2.addWeighted(image, 0.5, canvas, 0.5, 0)
+
+            cv2.imshow('AI Virtual Painter', image)
+
+            if cv2.waitKey(1) & 0xFF == 27:  
+                break
+
+        cap.release()
+        cv2.destroyAllWindows()
+
+if __name__ == "__main__":
+    main()
