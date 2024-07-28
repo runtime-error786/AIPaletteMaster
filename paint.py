@@ -51,3 +51,24 @@ def draw_on_canvas(canvas, index_x, index_y):
     else:
         cv2.circle(canvas, (index_x, index_y), 10, selected_color, -1)
 
+def process_frame(image, hand_landmarks, canvas):
+    """Process each frame to detect hand landmarks and draw."""
+    for hand_landmark in hand_landmarks:
+        mp_drawing.draw_landmarks(
+            image, hand_landmark, mp_hands.HAND_CONNECTIONS,
+            mp_drawing.DrawingSpec(color=(121, 22, 76), thickness=2, circle_radius=4),
+            mp_drawing.DrawingSpec(color=(250, 44, 250), thickness=2, circle_radius=2)
+        )
+
+        h, w, _ = image.shape
+        index_finger_tip = hand_landmark.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP]
+        middle_finger_tip = hand_landmark.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_TIP]
+
+        index_x, index_y = int(index_finger_tip.x * w), int(index_finger_tip.y * h)
+        middle_x, middle_y = int(middle_finger_tip.x * w), int(middle_finger_tip.y * h)
+
+        if is_close(index_x, index_y, middle_x, middle_y):
+            select_color(index_x, index_y)
+        else:
+            draw_on_canvas(canvas, index_x, index_y)
+
