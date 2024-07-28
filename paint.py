@@ -44,3 +44,10 @@ def select_color(index_x, index_y):
     elif 500 < index_x < 600 and 50 < index_y < 150:
         selected_color = eraser
 
+def draw_on_canvas(canvas, index_x, index_y):
+    """Draw or erase on the canvas."""
+    if selected_color == eraser:
+        cv2.circle(canvas, (index_x, index_y), 20, (255, 255, 255), -1)
+    else:
+        cv2.circle(canvas, (index_x, index_y), 10, selected_color, -1)
+
